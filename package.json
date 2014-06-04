@@ -1,7 +1,7 @@
 {
   "name": "mask-formatter",
   "version": "0.0.0",
-  "description": "A string formatter and validator based on Excel like masks",
+  "description": "A string formatter and validator based on masks",
   "private": true,
   "id": "/mask-formatter",
   "main": "src/mask-formatter.js",
@@ -9,6 +9,8 @@
   "devDependencies": {
     "gulp": "^3.7.0",
     "gulp-jshint": "^1.6.1",
-    "jshint-stylish": "^0.2.0"
+    "gulp-spawn-mocha": "^0.1.4",
+    "jshint-stylish": "^0.2.0",
+    "should": "^4.0.1"
   }
 }

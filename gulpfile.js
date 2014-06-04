@@ -1,19 +1,31 @@
 var gulp = require('gulp'),
 	jshint = require('gulp-jshint'),
-	jshintReporter = require('jshint-stylish');
+	jshintReporter = require('jshint-stylish'),
+	mocha = require('gulp-spawn-mocha');
 
 var path = {
-	api: {
-		files: 'api/**/*.js'
+	src: {
+		files: 'src/**/*.js'
+	},
+	test: {
+		files: 'src/**/*.test.js'
 	}
 }
 
-gulp.task('api', function() {
-	gulp.src(path.api.files)
+gulp.task('jshint', function() {
+	gulp.src(path.src.files)
 	.pipe(jshint('.jshintrc'))
 	.pipe(jshint.reporter(jshintReporter));
 });
 
-gulp.task('default', ['api'], function() {
-    gulp.watch(path.api.files, ['api']);
+gulp.task('test', function() {
+	gulp.src(path.test.files, {read: false})
+	.pipe(mocha({
+		reporter: 'dot'
+	}))
+	.on('error', console.warn.bind(console));
+});
+
+gulp.task('default', ['jshint', 'test'], function() {
+    gulp.watch(path.src.files, ['jshint', 'test']);
 });
