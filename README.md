@@ -1,5 +1,5 @@
-mask-formatter
-##############
+#mask-formatter
+
 
 A string formatter and validator based on Excel like masks.
 
