@@ -1,9 +1,9 @@
 require('should');
-var MaskFormatter = require('./mask-formatter');
+var StringMask = require('./string-mask');
 
 describe('mask-formatter', function(){
 	function test(p) {
-		var processed = MaskFormatter.process(p.text, p.pattern, p.options);
+		var processed = StringMask.process(p.text, p.pattern, p.options);
 		processed.formatted.should.be.eql(p.expected);
 		processed.valid.should.be.eql(p.valid);
 	}
@@ -62,7 +62,7 @@ describe('mask-formatter', function(){
 	});
 
 	it('should format to pattern \'990,00%\'', function(done) {
-		var formatter = new MaskFormatter('990,00%');
+		var formatter = new StringMask('990,00%');
 		var processed = formatter.process('001');
 		processed.formatted.should.be.eql('0,01%');
 		processed.valid.should.be.eql(true);
@@ -74,7 +74,7 @@ describe('mask-formatter', function(){
 	});
 
 	it('should format to pattern \'+00 (00) 0000-0000\'', function(done) {
-		var formatter = new MaskFormatter('+00 (00) 0000-0000');
+		var formatter = new StringMask('+00 (00) 0000-0000');
 		var processed = formatter.process('553122222222');
 		processed.formatted.should.be.eql('+55 (31) 2222-2222');
 		processed.valid.should.be.eql(true);

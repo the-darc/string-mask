@@ -1,12 +1,11 @@
-#mask-formatter
-
+#string-mask
 
 A string formatter and validator based on Excel like masks.
 
 ## Installation ##
 
 ```javascript
-npm install --save mask-formatter
+npm install --save string-mask
 ```
 
 ## Special mask's characters ##
@@ -25,18 +24,20 @@ Character | Description
 
 ## Usage ##
 
-__TODO: Description of the api__
-
 ### Number ###
 
 ```javascript
-// TODO - sample code here
+	// Not implemented yet
+	var formatter = new MaskFormatter('#0');
+	var processed = formatter.format('123'); // 123
 ```
 
-### Two Decimal number ###
+### Two Decimal number with thousands separators###
 
 ```javascript
-// TODO - sample code here
+	// Not implemented yet
+	var formatter = new MaskFormatter('#.##0,00');
+	var processed = formatter.format('100123456'); // 1.001.234.56
 ```
 
 ### Phone number ###
@@ -49,7 +50,8 @@ __TODO: Description of the api__
 ### Percentage ###
 
 ```javascript
-	var formatter = new MaskFormatter('990,00%');
+	// Not implemented yet
+	var formatter = new MaskFormatter('#0,00%');
 	var processed = formatter.format('001'); // 0,01%
 ```
 

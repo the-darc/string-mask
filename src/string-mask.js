@@ -1,5 +1,5 @@
 
-var MaskFormatter = function(pattern, opt) {
+var StringMask = function(pattern, opt) {
 	var tokens = {
 		'0': {pattern: /\d/},
 		'9': {pattern: /\d/, optional: true},
@@ -36,7 +36,7 @@ var MaskFormatter = function(pattern, opt) {
 		return text + character;
 	};
 
-	MaskFormatter.prototype.process = function proccess(value) {
+	StringMask.prototype.process = function proccess(value) {
 		var valid = true;
 		var formatted = '';
 		var valuePos = options.reverse ? value.length - 1 : 0;
@@ -90,25 +90,25 @@ var MaskFormatter = function(pattern, opt) {
 		return {formatted: formatted, valid: valid};
 	};
 
-	MaskFormatter.prototype.format = function(value) {
+	StringMask.prototype.format = function(value) {
 		return this.process(value).formatted;
 	};
 
-	MaskFormatter.prototype.validate = function(value) {
+	StringMask.prototype.validate = function(value) {
 		return this.process(value).valid;
 	};
 };
 
-MaskFormatter.process = function(value, pattern, options) {
-	return new MaskFormatter(pattern, options).process(value);
+StringMask.process = function(value, pattern, options) {
+	return new StringMask(pattern, options).process(value);
 };
 
-MaskFormatter.format = function(value, pattern, options) {
-	return new MaskFormatter(pattern, options).format(value);
+StringMask.format = function(value, pattern, options) {
+	return new StringMask(pattern, options).format(value);
 };
 
-MaskFormatter.validate = function(value, pattern, options) {
-	return new MaskFormatter(pattern, options).validate(value);
+StringMask.validate = function(value, pattern, options) {
+	return new StringMask(pattern, options).validate(value);
 };
 
-module.exports = MaskFormatter;
+module.exports = StringMask;

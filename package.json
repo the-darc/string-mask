@@ -1,10 +1,29 @@
 {
-  "name": "mask-formatter",
+  "name": "string-mask",
   "version": "0.0.0",
   "description": "A string formatter and validator based on masks",
   "private": true,
-  "id": "/mask-formatter",
-  "main": "src/mask-formatter.js",
+  "id": "/string-mask",
+  "main": "src/string-mask.js",
+  "repository" :{ 
+    "type" : "git",
+    "url" : "https://github.com/the-darc/string-mask.git"
+  },
+  "bugs": { 
+    "url" : "https://github.com/the-darc/string-mask/issues"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "keywords": [
+    "mask",
+    "formatter",
+    "string",
+    "validator",
+    "validation"
+  ],
+  "author": "darc.tec@gmail.com",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.7.0",
