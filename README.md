@@ -28,43 +28,43 @@ Character | Description
 
 ```javascript
 	// Not implemented yet
-	var formatter = new MaskFormatter('#0');
-	var processed = formatter.format('123'); // 123
+	var formatter = new StringMask('#0');
+	var result = formatter.apply('123'); // 123
 ```
 
 ### Two Decimal number with thousands separators###
 
 ```javascript
 	// Not implemented yet
-	var formatter = new MaskFormatter('#.##0,00');
-	var processed = formatter.format('100123456'); // 1.001.234.56
+	var formatter = new StringMask('#.##0,00');
+	var result = formatter.apply('100123456'); // 1.001.234.56
 ```
 
 ### Phone number ###
 
 ```javascript
-	var formatter = new MaskFormatter('+00 (00) 0000-0000');
-	var processed = formatter.format('553122222222'); // +55 (31) 2222-2222
+	var formatter = new StringMask('+00 (00) 0000-0000');
+	var result = formatter.apply('553122222222'); // +55 (31) 2222-2222
 ```
 
 ### Percentage ###
 
 ```javascript
 	// Not implemented yet
-	var formatter = new MaskFormatter('#0,00%');
-	var processed = formatter.format('001'); // 0,01%
+	var formatter = new StringMask('#0,00%');
+	var result = formatter.apply('001'); // 0,01%
 ```
 
 ### Brazilian CPF number ###
 
 ```javascript
-	var formatter = new MaskFormatter('000.000.000-00');
-	var cpf = formatter.format('12965815620'); // 129.658.156-20
+	var formatter = new StringMask('000.000.000-00');
+	var result = formatter.apply('12965815620'); // 129.658.156-20
 ```
 
 ### Date and time ###
 
 ```javascript
-	var formatter = new MaskFormatter('90/90/9900');
-	var cpf = formatter.format('1187'); // 1/1/87
+	var formatter = new StringMask('90/90/9900');
+	var result = formatter.apply('1187'); // 1/1/87
 ```

@@ -87,11 +87,11 @@ var StringMask = function(pattern, opt) {
 				valid = false;
 			}
 		}
-		return {formatted: formatted, valid: valid};
+		return {result: formatted, valid: valid};
 	};
 
-	StringMask.prototype.format = function(value) {
-		return this.process(value).formatted;
+	StringMask.prototype.apply = function(value) {
+		return this.process(value).result;
 	};
 
 	StringMask.prototype.validate = function(value) {
@@ -103,8 +103,8 @@ StringMask.process = function(value, pattern, options) {
 	return new StringMask(pattern, options).process(value);
 };
 
-StringMask.format = function(value, pattern, options) {
-	return new StringMask(pattern, options).format(value);
+StringMask.apply = function(value, pattern, options) {
+	return new StringMask(pattern, options).apply(value);
 };
 
 StringMask.validate = function(value, pattern, options) {

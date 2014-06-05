@@ -4,7 +4,7 @@ var StringMask = require('./string-mask');
 describe('mask-formatter', function(){
 	function test(p) {
 		var processed = StringMask.process(p.text, p.pattern, p.options);
-		processed.formatted.should.be.eql(p.expected);
+		processed.result.should.be.eql(p.expected);
 		processed.valid.should.be.eql(p.valid);
 	}
 
@@ -64,11 +64,11 @@ describe('mask-formatter', function(){
 	it('should format to pattern \'990,00%\'', function(done) {
 		var formatter = new StringMask('990,00%');
 		var processed = formatter.process('001');
-		processed.formatted.should.be.eql('0,01%');
+		processed.result.should.be.eql('0,01%');
 		processed.valid.should.be.eql(true);
 
 		processed = formatter.process('12000');
-		processed.formatted.should.be.eql('120,00%');
+		processed.result.should.be.eql('120,00%');
 		processed.valid.should.be.eql(true);
 		done();
 	});
@@ -76,7 +76,7 @@ describe('mask-formatter', function(){
 	it('should format to pattern \'+00 (00) 0000-0000\'', function(done) {
 		var formatter = new StringMask('+00 (00) 0000-0000');
 		var processed = formatter.process('553122222222');
-		processed.formatted.should.be.eql('+55 (31) 2222-2222');
+		processed.result.should.be.eql('+55 (31) 2222-2222');
 		processed.valid.should.be.eql(true);
 		done();
 	});
