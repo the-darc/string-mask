@@ -4,8 +4,16 @@ A string formatter and validator based on Excel like masks.
 
 ## Installation ##
 
+### With npm
+
 ```javascript
 npm install --save string-mask
+```
+
+### With bower
+
+```javascript
+bower install --save string-mask
 ```
 
 ## Special mask's characters ##
