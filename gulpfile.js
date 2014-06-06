@@ -18,7 +18,7 @@ gulp.task('jshint', function() {
 	.pipe(jshint.reporter(jshintReporter));
 });
 
-gulp.task('test', function() {
+gulp.task('runtestdot', function() {
 	gulp.src(path.test.files, {read: false})
 	.pipe(mocha({
 		reporter: 'dot'
@@ -26,6 +26,18 @@ gulp.task('test', function() {
 	.on('error', console.warn.bind(console));
 });
 
-gulp.task('default', ['jshint', 'test'], function() {
-    gulp.watch(path.src.files, ['jshint', 'test']);
+gulp.task('runtest', function() {
+	gulp.src(path.test.files, {read: false})
+	.pipe(mocha({
+		reporter: 'spec'
+	}))
+	.on('error', console.warn.bind(console));
+});
+
+gulp.task('default', ['jshint', 'runtestdot'], function() {
+    gulp.watch(path.src.files, ['jshint', 'runtestdot']);
+});
+
+gulp.task('test', ['jshint', 'runtest'], function() {
+    gulp.watch(path.src.files, ['jshint', 'runtest']);
 });

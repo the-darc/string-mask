@@ -2,6 +2,7 @@ var StringMask = (function() {
 	var tokens = {
 		'0': {pattern: /\d/},
 		'9': {pattern: /\d/, optional: true},
+		'#': {pattern: /\d/, optional: true, recursive: true},
 		'S': {pattern: /[a-zA-Z]/},
 		'$': {escape: true} 
 	};
@@ -25,6 +26,17 @@ var StringMask = (function() {
 		if (options.reverse) return character + text;
 		return text + character;
 	};
+	var hasMoreTokens = function(pattern, pos, inc) {
+		var pc = pattern.charAt(pos);
+		var token = tokens[pc];
+		if (pc === '') return false;
+		return token && !token.escape ? true : hasMoreTokens(pattern, pos + inc, inc);
+	};
+	var insertChar = function(text, char, position) {
+		var t = text.split('');
+		t.splice(position >= 0 ? position: 0, 0, char);
+		return t.join('');
+	};
 	var StringMask = function(pattern, opt) {
 		this.options = opt || {};
 		this.options = {
@@ -36,43 +48,88 @@ var StringMask = (function() {
 		this.pattern = pattern;
 
 		StringMask.prototype.process = function proccess(value) {
+			var pattern2 = this.pattern;
 			var valid = true;
 			var formatted = '';
 			var valuePos = this.options.reverse ? value.length - 1 : 0;
-			var optionalNumbersToUse = calcOptionalNumbersToUse(this.pattern, value);
+			var optionalNumbersToUse = calcOptionalNumbersToUse(pattern2, value);
 			var escapeNext = false;
+			var recursive = [];
+			var inRecursiveMode = false;
 
 			var steps = {
-				start: this.options.reverse ? this.pattern.length - 1 : 0,
-				end: this.options.reverse ? -1 : this.pattern.length,
+				start: this.options.reverse ? pattern2.length - 1 : 0,
+				end: this.options.reverse ? -1 : pattern2.length,
 				inc: this.options.reverse ? -1 : 1
 			};
 
-			for (var i = steps.start; i !== steps.end; i = i + steps.inc) {
-				var pc = this.pattern.charAt(i);
+			var continueCondition = function(options) {
+				if (!inRecursiveMode && hasMoreTokens(pattern2, i, steps.inc)) {
+					return true;
+				} else if (!inRecursiveMode) {
+					inRecursiveMode = recursive.length > 0;
+				}
+
+				if (inRecursiveMode) {
+					var pc = recursive.shift();
+					recursive.push(pc);
+					if (options.reverse && valuePos >= 0) {
+						i++;
+						pattern2 = insertChar(pattern2, pc, i);
+						return true;
+					} else if (!options.reverse && valuePos < value.length) {
+						pattern2 = insertChar(pattern2, pc, i);
+						return true;
+					}
+				}
+				return i < pattern2.length && i >= 0;
+			};
+
+			for (var i = steps.start; continueCondition(this.options); i = i + steps.inc) {
+				var pc = pattern2.charAt(i);
 				var vc = value.charAt(valuePos);
 				var token = tokens[pc];
+				if (!inRecursiveMode || vc) {
+					if (this.options.reverse && isEscaped(pattern2, i)) {
+						formatted = concatChar(formatted, pc, this.options);
+						i = i + steps.inc;
+						continue;
+					} else if (!this.options.reverse && escapeNext) {
+						formatted = concatChar(formatted, pc, this.options);
+						escapeNext = false;
+						continue;
+					} else if (!this.options.reverse && token && token.escape) {
+						escapeNext = true;
+						continue;
+					}
+				}
 
-				if (this.options.reverse && isEscaped(this.pattern, i)) {
-					formatted = concatChar(formatted, pc, this.options);
-					i = i + steps.inc;
+				if (!inRecursiveMode && token && token.recursive) {
+					recursive.push(pc);
+				} else if (inRecursiveMode && !vc) {
+					if (!token || !token.recursive) formatted = concatChar(formatted, pc, this.options);
 					continue;
-				} else if (!this.options.reverse && escapeNext) {
-					formatted = concatChar(formatted, pc, this.options);
-					escapeNext = false;
+				} else if (recursive.length > 0 && token && !token.recursive) {
+					// Recursive tokens most be the last tokens of the pattern
+					valid = false;
 					continue;
-				} else if (!this.options.reverse && token && token.escape) {
-					escapeNext = true;
+				} else if (!inRecursiveMode && recursive.length > 0 && !vc) {
 					continue;
 				}
 
 				if (!token) {
 					formatted = concatChar(formatted, pc, this.options);
+					if (!inRecursiveMode && recursive.length) {
+						recursive.push(pc);
+					}
 				} else if (token.optional) {
 					if (token.pattern.test(vc) && optionalNumbersToUse) {
 						formatted = concatChar(formatted, vc, this.options);
 						valuePos = valuePos + steps.inc;
 						optionalNumbersToUse--;
+					} else if (recursive.length > 0 && vc) {
+						valid = false;
+						break;
 					}
 				} else if (token.pattern.test(vc)) {
 					formatted = concatChar(formatted, vc, this.options);
@@ -86,6 +143,7 @@ var StringMask = (function() {
 					valid = false;
 				}
 			}
+
 			return {result: formatted, valid: valid};
 		};
 

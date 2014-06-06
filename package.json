@@ -13,7 +13,7 @@
     "url" : "https://github.com/the-darc/string-mask/issues"
   },
   "scripts": {
-    "test": "gulp"
+    "test": "gulp test"
   },
   "keywords": [
     "mask",

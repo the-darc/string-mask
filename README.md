@@ -14,7 +14,7 @@ Character | Description
 --- | ---
 `0` | Any numbers
 `9` | Any numbers (Optional)
-`#` | Any numbers (recursive) __Not implemented yet__
+`#` | Any numbers (recursive)
 `A` | Any aphanumeric character __Not implemented yet__
 `a` | Any aphanumeric character (Optional) __Not implemented yet__
 `S` | Any letter
@@ -27,7 +27,6 @@ Character | Description
 ### Number ###
 
 ```javascript
-	// Not implemented yet
 	var formatter = new StringMask('#0');
 	var result = formatter.apply('123'); // 123
 ```
@@ -35,7 +34,6 @@ Character | Description
 ### Two Decimal number with thousands separators###
 
 ```javascript
-	// Not implemented yet
 	var formatter = new StringMask('#.##0,00');
 	var result = formatter.apply('100123456'); // 1.001.234.56
 ```
@@ -50,7 +48,6 @@ Character | Description
 ### Percentage ###
 
 ```javascript
-	// Not implemented yet
 	var formatter = new StringMask('#0,00%');
 	var result = formatter.apply('001'); // 0,01%
 ```
