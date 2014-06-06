@@ -20,6 +20,6 @@
     "node_modules",
     "bower_components",
     "**/*.test.js",
-    "package.json",
+    "package.json"
   ]
 }
