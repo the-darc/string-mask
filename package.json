@@ -1,8 +1,7 @@
 {
   "name": "string-mask",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A string formatter and validator based on masks",
-  "private": true,
   "id": "/string-mask",
   "main": "src/string-mask.js",
   "repository" :{ 
@@ -22,7 +21,10 @@
     "validator",
     "validation"
   ],
-  "author": "darc.tec@gmail.com",
+  "author": {
+    "name": "Daniel Campos",
+    "email": "darc.tec@gmail.com"
+  },
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
