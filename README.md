@@ -1,6 +1,6 @@
 #string-mask
 
-A string formatter and validator based on Excel like masks.
+A string formatter and validator based on masks.
 
 ## Installation ##
 
@@ -43,7 +43,8 @@ Character | Description
 
 ```javascript
 	var formatter = new StringMask('#.##0,00');
-	var result = formatter.apply('100123456'); // 1.001.234.56
+	var result = formatter.apply('100123456'); // 1.001.234,56
+	result = formatter.apply('6'); // 0,06
 ```
 
 ### Phone number ###
