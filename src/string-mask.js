@@ -48,6 +48,8 @@ var StringMask = (function() {
 		this.pattern = pattern;
 
 		StringMask.prototype.process = function proccess(value) {
+			if (!value) return '';
+			value = value + '';
 			var pattern2 = this.pattern;
 			var valid = true;
 			var formatted = '';
