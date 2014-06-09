@@ -115,6 +115,12 @@ describe('mask-formatter', function(){
 			test(p);
 			done();
 		});
+		it('reverse \'R$ #.##0,00\' should format \'1\' to \'R$ 0,01\'', function(done) {
+			p.text = '1';
+			p.expected = 'R$ 0,01';
+			test(p);
+			done();
+		});
 		it('reverse \'R$ #.##0,00\' should format \'123a4567810\' to \'45.678,10\' and be invalid', function(done) {
 			p.text = '123a4567810';
 			p.expected = '45.678,10';
@@ -156,25 +162,6 @@ describe('mask-formatter', function(){
 			test(p);
 			done();
 		});	
-		it('\'000.000.000-00\' should format \'12a\' to \'12..-\'', function(done) {
-			p.options = {reverse: false, continuewheninvalid: true};
-			p.text = '12a';
-			p.expected = '12..-';
-			p.valid = false;
-			test(p);
-			done();
-		});	
-		it('\'000.000.000-00\' should format \'1234\' to \'123.4__.___-__\'', function(done) {
-			p = {
-				text: '1234',
-				pattern: '000.000.000-00',
-				expected: '123.4__.___-__',
-				valid: false,
-				options: {placeholder: '_', continuewheninvalid: true}
-			};
-			test(p);
-			done();
-		});
 	});
 
 	describe('Date:', function() {
