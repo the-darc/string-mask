@@ -42,7 +42,7 @@ Character | Description
 ### Two Decimal number with thousands separators###
 
 ```javascript
-	var formatter = new StringMask('#.##0,00');
+	var formatter = new StringMask('#.##0,00', {reverse: true});
 	var result = formatter.apply('100123456'); // 1.001.234,56
 	result = formatter.apply('6'); // 0,06
 ```
