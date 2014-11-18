@@ -1,6 +1,6 @@
 var StringMask = (function() {
 	var tokens = {
-		'0': {pattern: /\d/, default: '0'},
+		'0': {pattern: /\d/, _default: '0'},
 		'9': {pattern: /\d/, optional: true},
 		'#': {pattern: /\d/, optional: true, recursive: true},
 		'S': {pattern: /[a-zA-Z]/},
@@ -134,8 +134,8 @@ var StringMask = (function() {
 				} else if (token.pattern.test(vc)) {
 					formatted = concatChar(formatted, vc, this.options);
 					valuePos = valuePos + steps.inc;
-				} else if (!vc && token.default && this.options.usedefaults) {
-					formatted = concatChar(formatted, token.default, this.options);
+				} else if (!vc && token._default && this.options.usedefaults) {
+					formatted = concatChar(formatted, token._default, this.options);
 				} else {
 					valid = false;
 					break;
