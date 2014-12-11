@@ -4,8 +4,8 @@ var StringMask = (function() {
 		'9': {pattern: /\d/, optional: true},
 		'#': {pattern: /\d/, optional: true, recursive: true},
 		'S': {pattern: /[a-zA-Z]/},
-		'U': {pattern: /[a-zA-Z]/, transform: 'toLocaleUpperCase'},
-		'L': {pattern: /[a-zA-Z]/, transform: 'toLocaleLowerCase'},
+		'U': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleUpperCase(); }},
+		'L': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleLowerCase(); }},
 		'$': {escape: true} 
 	};
 	var isEscaped = function(pattern, pos) {
@@ -25,7 +25,7 @@ var StringMask = (function() {
 		return numbersInV - numbersInP;
 	};
 	var concatChar = function(text, character, options, token) {
-		if (token && token.transform) character = character[token.transform]();
+		if (token && typeof token.transform == 'function') character = token.transform(character);
 		if (options.reverse) return character + text;
 		return text + character;
 	};
