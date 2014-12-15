@@ -153,7 +153,7 @@ describe('mask-formatter', function(){
 			p.options = {reverse: true};
 			test(p);
 			done();
-		});	
+		});
 		it('\'000.000.000-00\' should format \'12345678a80\' to \'123.456.78\'', function(done) {
 			p.options = {reverse: false};
 			p.text = '12345678a80';
@@ -161,7 +161,7 @@ describe('mask-formatter', function(){
 			p.valid = false;
 			test(p);
 			done();
-		});	
+		});
 	});
 
 	describe('Date:', function() {
@@ -239,28 +239,53 @@ describe('mask-formatter', function(){
 		});
 	});
 
-	describe('Uppercase:', function() {
-		var p = {
-			text: 'Testing',
-			pattern: 'UUUUUUU',
-			expected: 'TESTING',
-			valid: true
-		};
+	describe('Case:', function() {
 		it('\'UUUUUUU\' should format \'Testing\' to \'TESTING\'', function(done) {
-			test(p);
+			test({
+				text: 'Testing',
+				pattern: 'UUUUUUU',
+				expected: 'TESTING',
+				valid: true
+			});
+			done();
+		});
+		it('\'LLLLLLL\' should format \'Testing\' to \'testing\'', function(done) {
+			test({
+				text: 'Testing',
+				pattern: 'LLLLLLL',
+				expected: 'testing',
+				valid: true
+			});
 			done();
 		});
 	});
 
-	describe('Lowercase:', function() {
-		var p = {
-			text: 'Testing',
-			pattern: 'LLLLLLL',
-			expected: 'testing',
-			valid: true
-		};
-		it('\'LLLLLLL\' should format \'Testing\' to \'testing\'', function(done) {
-			test(p);
+	describe('Scientific notations:', function() {
+		it('\'0.00E#\' should format \'12310\' to \'1.23E10\'', function(done) {
+			test({
+				text: '12310',
+				pattern: '0.00E#',
+				expected: '1.23E10',
+				valid: true
+			});
+			done();
+		});
+		it('\'0.0E#\' should format \'12310\' to \'1.2E310\'', function(done) {
+			test({
+				text: '12310',
+				pattern: '0.0E#',
+				expected: '1.2E310',
+				valid: true
+			});
+			done();
+		});
+		it('\'0.000E#\' should format \'123\' to \'1.23\'', function(done) {
+			test({
+				text: '123',
+				pattern: '0.000E#',
+				expected: '1.23',
+				valid: false
+			});
 			done();
 		});
 	});

@@ -6,7 +6,7 @@ var StringMask = (function() {
 		'S': {pattern: /[a-zA-Z]/},
 		'U': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleUpperCase(); }},
 		'L': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleLowerCase(); }},
-		'$': {escape: true} 
+		'$': {escape: true}
 	};
 	var isEscaped = function(pattern, pos) {
 		var count = 0;
@@ -17,7 +17,7 @@ var StringMask = (function() {
 			count += token && token.escape ? 1 : 0;
 			i--;
 		}
-		return count > 0 && count%2 === 1;	
+		return count > 0 && count%2 === 1;
 	};
 	var calcOptionalNumbersToUse = function(pattern, value) {
 		var numbersInP = pattern.replace(/[^0]/g,'').length;
@@ -25,7 +25,7 @@ var StringMask = (function() {
 		return numbersInV - numbersInP;
 	};
 	var concatChar = function(text, character, options, token) {
-		if (token && typeof token.transform == 'function') character = token.transform(character);
+		if (token && typeof token.transform === 'function') character = token.transform(character);
 		if (options.reverse) return character + text;
 		return text + character;
 	};
@@ -183,5 +183,5 @@ var objectTypes = {
 };
 
 if (objectTypes[typeof module]) {
-	module.exports = StringMask;	
+	module.exports = StringMask;
 }
