@@ -1,6 +1,6 @@
 {
   "name": "string-mask",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A string formatter and validator based on masks",
   "id": "/string-mask",
   "main": "src/string-mask.js",

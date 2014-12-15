@@ -1,6 +1,6 @@
 [![npm version](https://badge.fury.io/js/string-mask.svg)](http://badge.fury.io/js/string-mask)
 [![Bower version](https://badge.fury.io/bo/string-mask.svg)](http://badge.fury.io/bo/string-mask)
-[![Build Status](https://travis-ci.org/the-darc/string-masks.svg?branch=develop)](https://travis-ci.org/the-darc/string-masks)
+[![Build Status](https://travis-ci.org/the-darc/string-mask.svg?branch=master)](https://travis-ci.org/the-darc/string-mask)
 
 #string-mask
 
