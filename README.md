@@ -1,3 +1,7 @@
+[![npm version](https://badge.fury.io/js/string-mask.svg)](http://badge.fury.io/js/string-mask)
+[![Bower version](https://badge.fury.io/bo/string-mask.svg)](http://badge.fury.io/bo/string-mask)
+[![Build Status](https://travis-ci.org/the-darc/string-masks.svg?branch=develop)](https://travis-ci.org/the-darc/string-masks)
+
 #string-mask
 
 A string formatter and validator based on masks.
@@ -26,8 +30,8 @@ Character | Description
 `A` | Any aphanumeric character __Not implemented yet__
 `a` | Any aphanumeric character (Optional) __Not implemented yet__
 `S` | Any letter
-`U` | Any letter (All lower case character will be mapped to uppercase) __Not implemented yet__
-`L` | Any letter (All upper case character will be mapped to lowercase) __Not implemented yet__
+`U` | Any letter (All lower case character will be mapped to uppercase)
+`L` | Any letter (All upper case character will be mapped to lowercase)
 `$` | Escape character, used to escape any of the special formatting characters.
 
 ## Usage ##
@@ -73,4 +77,16 @@ Character | Description
 ```javascript
 	var formatter = new StringMask('90/90/9900');
 	var result = formatter.apply('1187'); // 1/1/87
+```
+
+### Convert Case ###
+
+```javascript
+	var formatter = new StringMask('UUUUUUUUUUUUU');
+	var result = formatter.apply('To Upper Case'); // TO UPPER CASE
+```
+
+```javascript
+	var formatter = new StringMask('LLLLLLLLLLLLL');
+	var result = formatter.apply('To Lower Case'); // to lower case
 ```
