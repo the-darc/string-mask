@@ -4,6 +4,8 @@ var StringMask = (function() {
 		'9': {pattern: /\d/, optional: true},
 		'#': {pattern: /\d/, optional: true, recursive: true},
 		'S': {pattern: /[a-zA-Z]/},
+		'U': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleUpperCase(); }},
+		'L': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleLowerCase(); }},
 		'$': {escape: true} 
 	};
 	var isEscaped = function(pattern, pos) {
@@ -22,7 +24,8 @@ var StringMask = (function() {
 		var numbersInV = value.replace(/[^\d]/g,'').length;
 		return numbersInV - numbersInP;
 	};
-	var concatChar = function(text, character, options) {
+	var concatChar = function(text, character, options, token) {
+		if (token && typeof token.transform == 'function') character = token.transform(character);
 		if (options.reverse) return character + text;
 		return text + character;
 	};
@@ -91,11 +94,11 @@ var StringMask = (function() {
 				var token = tokens[pc];
 				if (!inRecursiveMode || vc) {
 					if (this.options.reverse && isEscaped(pattern2, i)) {
-						formatted = concatChar(formatted, pc, this.options);
+						formatted = concatChar(formatted, pc, this.options, token);
 						i = i + steps.inc;
 						continue;
 					} else if (!this.options.reverse && escapeNext) {
-						formatted = concatChar(formatted, pc, this.options);
+						formatted = concatChar(formatted, pc, this.options, token);
 						escapeNext = false;
 						continue;
 					} else if (!this.options.reverse && token && token.escape) {
@@ -107,7 +110,7 @@ var StringMask = (function() {
 				if (!inRecursiveMode && token && token.recursive) {
 					recursive.push(pc);
 				} else if (inRecursiveMode && !vc) {
-					if (!token || !token.recursive) formatted = concatChar(formatted, pc, this.options);
+					if (!token || !token.recursive) formatted = concatChar(formatted, pc, this.options, token);
 					continue;
 				} else if (recursive.length > 0 && token && !token.recursive) {
 					// Recursive tokens most be the last tokens of the pattern
@@ -118,13 +121,13 @@ var StringMask = (function() {
 				}
 
 				if (!token) {
-					formatted = concatChar(formatted, pc, this.options);
+					formatted = concatChar(formatted, pc, this.options, token);
 					if (!inRecursiveMode && recursive.length) {
 						recursive.push(pc);
 					}
 				} else if (token.optional) {
 					if (token.pattern.test(vc) && optionalNumbersToUse) {
-						formatted = concatChar(formatted, vc, this.options);
+						formatted = concatChar(formatted, vc, this.options, token);
 						valuePos = valuePos + steps.inc;
 						optionalNumbersToUse--;
 					} else if (recursive.length > 0 && vc) {
@@ -132,10 +135,10 @@ var StringMask = (function() {
 						break;
 					}
 				} else if (token.pattern.test(vc)) {
-					formatted = concatChar(formatted, vc, this.options);
+					formatted = concatChar(formatted, vc, this.options, token);
 					valuePos = valuePos + steps.inc;
 				} else if (!vc && token._default && this.options.usedefaults) {
-					formatted = concatChar(formatted, token._default, this.options);
+					formatted = concatChar(formatted, token._default, this.options, token);
 				} else {
 					valid = false;
 					break;
