@@ -238,4 +238,30 @@ describe('mask-formatter', function(){
 			done();
 		});
 	});
+
+	describe('Uppercase:', function() {
+		var p = {
+			text: 'Testing',
+			pattern: 'UUUUUUU',
+			expected: 'TESTING',
+			valid: true
+		};
+		it('\'UUUUUUU\' should format \'Testing\' to \'TESTING\'', function(done) {
+			test(p);
+			done();
+		});
+	});
+
+	describe('Lowercase:', function() {
+		var p = {
+			text: 'Testing',
+			pattern: 'LLLLLLL',
+			expected: 'testing',
+			valid: true
+		};
+		it('\'LLLLLLL\' should format \'Testing\' to \'testing\'', function(done) {
+			test(p);
+			done();
+		});
+	});
 });
