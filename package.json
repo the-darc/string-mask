@@ -1,18 +1,18 @@
 {
   "name": "string-mask",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A string formatter and validator based on masks",
   "id": "/string-mask",
   "main": "src/string-mask.js",
-  "repository" :{
-    "type" : "git",
-    "url" : "https://github.com/the-darc/string-mask.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-darc/string-mask.git"
   },
   "bugs": {
-    "url" : "https://github.com/the-darc/string-mask/issues"
+    "url": "https://github.com/the-darc/string-mask/issues"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test-coverage"
   },
   "keywords": [
     "mask",
@@ -29,8 +29,11 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.7.0",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-istanbul": "^0.9.0",
     "gulp-jshint": "^1.6.1",
-    "gulp-spawn-mocha": "^0.1.4",
+    "gulp-load-plugins": "^0.10.0",
+    "gulp-mocha": "^2.0.1",
     "jshint-stylish": "^0.2.0",
     "should": "^4.0.1"
   }

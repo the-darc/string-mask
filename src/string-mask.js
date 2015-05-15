@@ -69,7 +69,9 @@
 	}
 
 	StringMask.prototype.process = function proccess(value) {
-		if (!value) return '';
+		if (!value) {
+			return {result: '', valid: false};
+		}
 		value = value + '';
 		var pattern2 = this.pattern;
 		var valid = true;
