@@ -1,6 +1,6 @@
 {
   "name": "string-mask",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A string formatter and validator based on masks",
   "id": "/string-mask",
   "main": "src/string-mask.js",
@@ -12,7 +12,7 @@
     "url": "https://github.com/the-darc/string-mask/issues"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test-coverage"
   },
   "keywords": [
     "mask",
