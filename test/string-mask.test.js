@@ -1,5 +1,5 @@
-require('should');
-var StringMask = require('./string-mask');
+var should = require('should');
+var StringMask = require('../src/string-mask');
 
 describe('mask-formatter', function(){
 	function test(p) {
@@ -286,6 +286,24 @@ describe('mask-formatter', function(){
 				expected: '1.23',
 				valid: false
 			});
+			done();
+		});
+	});
+
+	describe('Other usages:', function() {
+		it('Should run validate', function(done) {
+			should(StringMask.validate('mg11862459', 'SS 00.000.000')).be.ok;
+			should(StringMask.validate('1011862459', 'SS 00.000.000')).be.not.ok;
+			done();
+		});
+		it('Should apply mask', function(done) {
+			should(StringMask.apply('mg11862459', 'SS 00.000.000')).be.eql('mg 11.862.459');
+			done();
+		});
+		it('Should not apply mask on empty values', function(done) {
+			should(StringMask.apply('', 'SS 00.000.000')).be.eql('');
+			should(StringMask.apply(null, 'SS 00.000.000')).be.eql('');
+			should(StringMask.apply(undefined, 'SS 00.000.000')).be.eql('');
 			done();
 		});
 	});
