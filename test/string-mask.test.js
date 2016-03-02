@@ -291,11 +291,11 @@ describe('mask-formatter', function(){
     });
 
     describe('Iban:', function() {
-        it('\'0.00E#\' should format \'FR7611119000694100003333222\' to \'FR76 1111 9000 6941 0000 3333 222\'', function(done) {
+        it('\'0.00E#\' should format \'FR761111900069410000AA33222\' to \'FR76 1111 BBBB 6941 0000 AA33 222\'', function(done) {
             test({
-                text: 'FR7611119000694100003333222',
+                text: 'FR761111BBBB69410000AA33222',
                 pattern: 'UUAA AAAA AAAA AAAA AAAA AAAA AAA',
-                expected: 'FR76 1111 9000 6941 0000 3333 222',
+                expected: 'FR76 1111 BBBB 6941 0000 AA33 222',
                 valid: true
             });
             done();
