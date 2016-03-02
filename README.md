@@ -27,7 +27,7 @@ Character | Description
 `0` | Any numbers
 `9` | Any numbers (Optional)
 `#` | Any numbers (recursive)
-`A` | Any aphanumeric character __Not implemented yet__
+`A` | Any aphanumeric character
 `a` | Any aphanumeric character (Optional) __Not implemented yet__
 `S` | Any letter
 `U` | Any letter (All lower case character will be mapped to uppercase)

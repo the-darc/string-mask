@@ -261,34 +261,46 @@ describe('mask-formatter', function(){
 	});
 
 	describe('Scientific notations:', function() {
-		it('\'0.00E#\' should format \'12310\' to \'1.23E10\'', function(done) {
-			test({
-				text: '12310',
-				pattern: '0.00E#',
-				expected: '1.23E10',
-				valid: true
-			});
-			done();
-		});
-		it('\'0.0E#\' should format \'12310\' to \'1.2E310\'', function(done) {
-			test({
-				text: '12310',
-				pattern: '0.0E#',
-				expected: '1.2E310',
-				valid: true
-			});
-			done();
-		});
-		it('\'0.000E#\' should format \'123\' to \'1.23\'', function(done) {
-			test({
-				text: '123',
-				pattern: '0.000E#',
-				expected: '1.23',
-				valid: false
-			});
-			done();
-		});
-	});
+        it('\'0.00E#\' should format \'12310\' to \'1.23E10\'', function(done) {
+            test({
+                text: '12310',
+                pattern: '0.00E#',
+                expected: '1.23E10',
+                valid: true
+            });
+            done();
+        });
+        it('\'0.0E#\' should format \'12310\' to \'1.2E310\'', function(done) {
+            test({
+                text: '12310',
+                pattern: '0.0E#',
+                expected: '1.2E310',
+                valid: true
+            });
+            done();
+        });
+        it('\'0.000E#\' should format \'123\' to \'1.23\'', function(done) {
+            test({
+                text: '123',
+                pattern: '0.000E#',
+                expected: '1.23',
+                valid: false
+            });
+            done();
+        });
+    });
+
+    describe('Iban:', function() {
+        it('\'0.00E#\' should format \'FR7611119000694100003333222\' to \'FR76 1111 9000 6941 0000 3333 222\'', function(done) {
+            test({
+                text: 'FR7611119000694100003333222',
+                pattern: 'UUAA AAAA AAAA AAAA AAAA AAAA AAA',
+                expected: 'FR76 1111 9000 6941 0000 3333 222',
+                valid: true
+            });
+            done();
+        });
+    });
 
 	describe('Other usages:', function() {
 		it('Should run validate', function(done) {
