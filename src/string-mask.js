@@ -1,4 +1,5 @@
 (function (root, factory) {
+	/* istanbul ignore next */
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define([], factory);
@@ -63,7 +64,7 @@
 
     function insertChar(text, char, position) {
         var t = text.split('');
-        t.splice(position >= 0 ? position: 0, 0, char);
+        t.splice(position, 0, char);
         return t.join('');
     }
 
@@ -77,7 +78,9 @@
     }
 
     StringMask.prototype.process = function proccess(value) {
-        if (!value) return { result: '' };
+		if (!value) {
+			return {result: '', valid: false};
+		}
         value = value + '';
         var pattern2 = this.pattern;
         var valid = true;
@@ -170,11 +173,7 @@
                 recursive.push(pc);
             } else if (inRecursiveMode && !vc) {
             	// in recursive mode but value is finished. Add the pattern char if it is not a recursive token
-                if (!token || !token.recursive) formatted = concatChar(formatted, pc, this.options, token);
-                continue;
-            } else if (recursive.length > 0 && token && !token.recursive) {
-                // recursive tokens must be the last tokens of the pattern
-                valid = false;
+               	formatted = concatChar(formatted, pc, this.options, token);
                 continue;
             } else if (!inRecursiveMode && recursive.length > 0 && !vc) {
             	// recursiveMode not started but already in the recursive portion of the pattern

@@ -57,6 +57,16 @@ describe('mask-formatter', function(){
 			test(p);
 			done();
 		});
+		it('reverse \'#.##0,00\' should format \'1\' to \'0,01\'', function(done) {
+			test({
+				text: '1',
+				pattern: '#.##0,00',
+				expected: '0,01',
+				valid: true,
+				options: {reverse: true}
+			});
+			done();
+		});
 	});
 
 	describe('percentage:', function () {
@@ -291,12 +301,21 @@ describe('mask-formatter', function(){
     });
 
     describe('Iban:', function() {
-        it('\'0.00E#\' should format \'FR761111900069410000AA33222\' to \'FR76 1111 BBBB 6941 0000 AA33 222\'', function(done) {
+        it('\'UUAA AAAA AAAA AAAA AAAA AAAA AAA\' should format \'FR761111900069410000AA33222\' to \'FR76 1111 BBBB 6941 0000 AA33 222\'', function(done) {
             test({
                 text: 'FR761111BBBB69410000AA33222',
                 pattern: 'UUAA AAAA AAAA AAAA AAAA AAAA AAA',
                 expected: 'FR76 1111 BBBB 6941 0000 AA33 222',
                 valid: true
+            });
+            done();
+        });
+        it('\'UUAA AAAA AAAA AAAA AAAA AAAA AAA\' should format \'FR761111900069410000AA33222\' to \'FR76 1111 BBBB 6941 0000 AA33\'', function(done) {
+            test({
+                text: 'FR761111BBBB69410000AA-3222',
+                pattern: 'UUAA AAAA AAAA AAAA AAAA AAAA AAA',
+                expected: 'FR76 1111 BBBB 6941 0000 AA',
+                valid: false
             });
             done();
         });
@@ -316,6 +335,31 @@ describe('mask-formatter', function(){
 			should(StringMask.apply('', 'SS 00.000.000')).be.eql('');
 			should(StringMask.apply(null, 'SS 00.000.000')).be.eql('');
 			should(StringMask.apply(undefined, 'SS 00.000.000')).be.eql('');
+			done();
+		});
+		it('should not escape in the recursive portion of pattern', function(done) {
+			should(StringMask.apply('123', 'YZ #.##0,00', {reverse: true})).be.eql('YZ 1,23');
+			should(StringMask.apply('123', 'YZ#.##0,00', {reverse: true})).be.eql('YZ1,23');
+			should(StringMask.apply('123', 'US #.##0,00', {reverse: true})).be.eql('US 1,23');
+			should(StringMask.apply('123', 'US.#.##0,00', {reverse: true})).be.eql('US.1,23');
+			should(StringMask.apply('123456789', 'US #,##0.00', {reverse: true})).be.eql('US 1,234,567.89');
+			should(StringMask.apply('123456789', '$U$S #,##0.00', {reverse: true})).be.eql('$U$S 1,234,567.89');
+
+			should(StringMask.apply('123', '00,# YZ')).be.eql('12,3 YZ');
+			should(StringMask.apply('123', '00,0##.# US')).be.eql('12,3 US');
+			should(StringMask.apply('123456789', '00,0##.# US')).be.eql('12,345.678.9 US');
+			should(StringMask.apply('123456789', '00,0##.# $U$S')).be.eql('12,345.678.9 $U$S');
+
+			should(StringMask.apply('123456789', '#L##0,00', {reverse: true})).be.eql('1L234L567,89');
+			done();
+		});
+		it('should work with escaped tokens', function(done) {
+			should(StringMask.apply('125', '$##')).be.eql('#125');
+			should(StringMask.apply('125', '#$#', {reverse: true})).be.eql('125#');
+			should(StringMask.apply('JUSTTEST', 'AAAA $A AAAA')).be.eql('JUST A TEST');
+
+			should(StringMask.process('125a123', '$##')).be.eql({result: '#125', valid: false});
+
 			done();
 		});
 	});
