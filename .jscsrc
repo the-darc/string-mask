@@ -1,4 +1,5 @@
 {
     "preset": "google",
-    "validateIndentation": 4
+    "validateIndentation": 4,
+    "maximumLineLength": 120
 }

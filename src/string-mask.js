@@ -43,22 +43,30 @@
     }
 
     function concatChar(text, character, options, token) {
-        if (token && typeof token.transform === 'function') character = token.transform(character);
-        if (options.reverse) return character + text;
+        if (token && typeof token.transform === 'function') {
+            character = token.transform(character);
+        }
+        if (options.reverse) {
+            return character + text;
+        }
         return text + character;
     }
 
     function hasMoreTokens(pattern, pos, inc) {
         var pc = pattern.charAt(pos);
         var token = tokens[pc];
-        if (pc === '') return false;
+        if (pc === '') {
+            return false;
+        }
         return token && !token.escape ? true : hasMoreTokens(pattern, pos + inc, inc);
     }
 
     function hasMoreRecursiveTokens(pattern, pos, inc) {
         var pc = pattern.charAt(pos);
         var token = tokens[pc];
-        if (pc === '') return false;
+        if (pc === '') {
+            return false;
+        }
         return token && token.recursive ? true : hasMoreRecursiveTokens(pattern, pos + inc, inc);
     }
 
@@ -102,7 +110,8 @@
             if (!inRecursiveMode && !recursive.length && hasMoreTokens(pattern2, patternPos, steps.inc)) {
                 // continue in the normal iteration
                 return true;
-            } else if (!inRecursiveMode && recursive.length && hasMoreRecursiveTokens(pattern2, patternPos, steps.inc)) {
+            } else if (!inRecursiveMode && recursive.length &&
+                hasMoreRecursiveTokens(pattern2, patternPos, steps.inc)) {
                 // continue looking for the recursive tokens
                 // Note: all chars in the patterns after the recursive portion will be handled as static string
                 return true;
