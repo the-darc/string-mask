@@ -1,5 +1,5 @@
-(function (root, factory) {
-	/* istanbul ignore next */
+(function(root, factory) {
+    /* istanbul ignore next */
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define([], factory);
@@ -12,15 +12,15 @@
         // Browser globals (root is window)
         root.StringMask = factory();
     }
-}(this, function () {
+}(this, function() {
     var tokens = {
         '0': {pattern: /\d/, _default: '0'},
         '9': {pattern: /\d/, optional: true},
         '#': {pattern: /\d/, optional: true, recursive: true},
         'A': {pattern: /[a-zA-Z0-9]/},
         'S': {pattern: /[a-zA-Z]/},
-        'U': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleUpperCase(); }},
-        'L': {pattern: /[a-zA-Z]/, transform: function (c) { return c.toLocaleLowerCase(); }},
+        'U': {pattern: /[a-zA-Z]/, transform: function(c) { return c.toLocaleUpperCase(); }},
+        'L': {pattern: /[a-zA-Z]/, transform: function(c) { return c.toLocaleLowerCase(); }},
         '$': {escape: true}
     };
 
@@ -33,7 +33,7 @@
             count += token && token.escape ? 1 : 0;
             i--;
         }
-        return count > 0 && count%2 === 1;
+        return count > 0 && count % 2 === 1;
     }
 
     function calcOptionalNumbersToUse(pattern, value) {
@@ -78,14 +78,15 @@
     }
 
     StringMask.prototype.process = function proccess(value) {
-		if (!value) {
-			return {result: '', valid: false};
-		}
+        if (!value) {
+            return {result: '', valid: false};
+        }
         value = value + '';
         var pattern2 = this.pattern;
         var valid = true;
         var formatted = '';
         var valuePos = this.options.reverse ? value.length - 1 : 0;
+        var patternPos = 0;
         var optionalNumbersToUse = calcOptionalNumbersToUse(pattern2, value);
         var escapeNext = false;
         var recursive = [];
@@ -98,15 +99,15 @@
         };
 
         function continueCondition(options) {
-            if (!inRecursiveMode && !recursive.length && hasMoreTokens(pattern2, i, steps.inc)) {
-            	// continue in the normal iteration
+            if (!inRecursiveMode && !recursive.length && hasMoreTokens(pattern2, patternPos, steps.inc)) {
+                // continue in the normal iteration
                 return true;
-            } else if (!inRecursiveMode && recursive.length && hasMoreRecursiveTokens(pattern2, i, steps.inc)) {
-            	// continue looking for the recursive tokens
-            	// Note: all chars in the patterns after the recursive portion will be handled as static string
+            } else if (!inRecursiveMode && recursive.length && hasMoreRecursiveTokens(pattern2, patternPos, steps.inc)) {
+                // continue looking for the recursive tokens
+                // Note: all chars in the patterns after the recursive portion will be handled as static string
                 return true;
             } else if (!inRecursiveMode) {
-            	// start to handle the recursive portion of the pattern
+                // start to handle the recursive portion of the pattern
                 inRecursiveMode = recursive.length > 0;
             }
 
@@ -114,15 +115,15 @@
                 var pc = recursive.shift();
                 recursive.push(pc);
                 if (options.reverse && valuePos >= 0) {
-                    i++;
-                    pattern2 = insertChar(pattern2, pc, i);
+                    patternPos++;
+                    pattern2 = insertChar(pattern2, pc, patternPos);
                     return true;
                 } else if (!options.reverse && valuePos < value.length) {
-                    pattern2 = insertChar(pattern2, pc, i);
+                    pattern2 = insertChar(pattern2, pc, patternPos);
                     return true;
                 }
             }
-            return i < pattern2.length && i >= 0;
+            return patternPos < pattern2.length && patternPos >= 0;
         }
 
         /**
@@ -132,29 +133,29 @@
          *
          * Note: The iteration must stop if an invalid char is found.
          */
-        for (var i = steps.start; continueCondition(this.options); i = i + steps.inc) {
+        for (patternPos = steps.start; continueCondition(this.options); patternPos = patternPos + steps.inc) {
             // Value char
             var vc = value.charAt(valuePos);
             // Pattern char to match with the value char
-            var pc = pattern2.charAt(i);
+            var pc = pattern2.charAt(patternPos);
 
             var token = tokens[pc];
             if (recursive.length && token && !token.recursive) {
-            	// In the recursive portion of the pattern: tokens not recursive must be seen as static chars
-            	token = null;
+                // In the recursive portion of the pattern: tokens not recursive must be seen as static chars
+                token = null;
             }
 
             // 1. Handle escape tokens in pattern
             // go to next iteration: if the pattern char is a escape char or was escaped
             if (!inRecursiveMode || vc) {
-                if (this.options.reverse && isEscaped(pattern2, i)) {
-                	// pattern char is escaped, just add it and move on
+                if (this.options.reverse && isEscaped(pattern2, patternPos)) {
+                    // pattern char is escaped, just add it and move on
                     formatted = concatChar(formatted, pc, this.options, token);
                     // skip escape token
-                    i = i + steps.inc;
+                    patternPos = patternPos + steps.inc;
                     continue;
                 } else if (!this.options.reverse && escapeNext) {
-                	// pattern char is escaped, just add it and move on
+                    // pattern char is escaped, just add it and move on
                     formatted = concatChar(formatted, pc, this.options, token);
                     escapeNext = false;
                     continue;
@@ -172,26 +173,26 @@
                 // save it to repeat in the end of the pattern and handle the value char now
                 recursive.push(pc);
             } else if (inRecursiveMode && !vc) {
-            	// in recursive mode but value is finished. Add the pattern char if it is not a recursive token
-               	formatted = concatChar(formatted, pc, this.options, token);
+                // in recursive mode but value is finished. Add the pattern char if it is not a recursive token
+                formatted = concatChar(formatted, pc, this.options, token);
                 continue;
             } else if (!inRecursiveMode && recursive.length > 0 && !vc) {
-            	// recursiveMode not started but already in the recursive portion of the pattern
+                // recursiveMode not started but already in the recursive portion of the pattern
                 continue;
             }
 
             // 3. Handle the value
             // break iterations: if value is invalid for the given pattern
             if (!token) {
-            	// add char of the pattern
+                // add char of the pattern
                 formatted = concatChar(formatted, pc, this.options, token);
                 if (!inRecursiveMode && recursive.length) {
-                	// save it to repeat in the end of the pattern
+                    // save it to repeat in the end of the pattern
                     recursive.push(pc);
                 }
             } else if (token.optional) {
-            	// if token is optional, only add the value char if it matchs the token pattern
-            	//                       if not, move on to the next pattern char
+                // if token is optional, only add the value char if it matchs the token pattern
+                //                       if not, move on to the next pattern char
                 if (token.pattern.test(vc) && optionalNumbersToUse) {
                     formatted = concatChar(formatted, vc, this.options, token);
                     valuePos = valuePos + steps.inc;
@@ -201,14 +202,14 @@
                     break;
                 }
             } else if (token.pattern.test(vc)) {
-            	// if token isn't optional the value char must match the token pattern
+                // if token isn't optional the value char must match the token pattern
                 formatted = concatChar(formatted, vc, this.options, token);
                 valuePos = valuePos + steps.inc;
             } else if (!vc && token._default && this.options.usedefaults) {
-            	// if the token isn't optional and has a default value, use it if the value is finished
+                // if the token isn't optional and has a default value, use it if the value is finished
                 formatted = concatChar(formatted, token._default, this.options, token);
             } else {
-            	// the string value don't match the given pattern
+                // the string value don't match the given pattern
                 valid = false;
                 break;
             }
