@@ -1,6 +1,7 @@
 var path = require('path'),
 	gulp = require('gulp'),
 	jshint = require('gulp-jshint'),
+	jscs = require('gulp-jscs'),
 	jshintReporter = require('jshint-stylish'),
 	plugins = require('gulp-load-plugins')({
 		config: path.join(__dirname, 'package.json')
@@ -19,6 +20,12 @@ gulp.task('jshint', function() {
 	gulp.src(config.src.files)
 	.pipe(jshint('.jshintrc'))
 	.pipe(jshint.reporter(jshintReporter));
+});
+
+gulp.task('jscs', function() {
+	gulp.src(config.src.files)
+	.pipe(jscs({fix: true}))
+    .pipe(gulp.dest('src'));
 });
 
 function mochaRunnerFactory(reporter) {
