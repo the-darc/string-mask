@@ -89,8 +89,10 @@
 
         function continueCondition(options) {
             if (!inRecursiveMode && hasMoreTokens(pattern2, i, steps.inc)) {
+            	// continue in the normal iteration
                 return true;
             } else if (!inRecursiveMode) {
+            	// start to handle the recursive portion of the pattern
                 inRecursiveMode = recursive.length > 0;
             }
 
@@ -109,44 +111,73 @@
             return i < pattern2.length && i >= 0;
         }
 
+        /**
+         * Iterate over the pattern's chars parsing/matching the input value chars
+         * until the end of the pattern. If the pattern ends with recursive chars
+         * the iteration will continue until the end of the input value.
+         *
+         * Note: The iteration must stop if an invalid char is found.
+         */
         for (var i = steps.start; continueCondition(this.options); i = i + steps.inc) {
-            var pc = pattern2.charAt(i);
+            // Value char
             var vc = value.charAt(valuePos);
+            // Pattern char to match with the value char
+            var pc = pattern2.charAt(i);
+
             var token = tokens[pc];
+
+            // 1. Handle escape tokens in pattern
+            // go to next iteration: if the pattern char is a escape char or was escaped
             if (!inRecursiveMode || vc) {
                 if (this.options.reverse && isEscaped(pattern2, i)) {
+                	// pattern char is escaped, just add it and move on
                     formatted = concatChar(formatted, pc, this.options, token);
+                    // skip escape token
                     i = i + steps.inc;
                     continue;
                 } else if (!this.options.reverse && escapeNext) {
+                	// pattern char is escaped, just add it and move on
                     formatted = concatChar(formatted, pc, this.options, token);
                     escapeNext = false;
                     continue;
                 } else if (!this.options.reverse && token && token.escape) {
+                    // mark to escape the next pattern char
                     escapeNext = true;
                     continue;
                 }
             }
 
+            // 2. Handle recursive tokens in pattern
+            // go to next iteration: if the value str is finished or
+            //                       if there is a normal token in the recursive portion of the pattern
             if (!inRecursiveMode && token && token.recursive) {
+                // save it to repeat in the end of the pattern and handle the value char now
                 recursive.push(pc);
             } else if (inRecursiveMode && !vc) {
+            	// in recursive mode but value is finished. Add the pattern char if it is not a recursive token
                 if (!token || !token.recursive) formatted = concatChar(formatted, pc, this.options, token);
                 continue;
             } else if (recursive.length > 0 && token && !token.recursive) {
-                // Recursive tokens most be the last tokens of the pattern
+                // recursive tokens must be the last tokens of the pattern
                 valid = false;
                 continue;
             } else if (!inRecursiveMode && recursive.length > 0 && !vc) {
+            	// recursiveMode not started but already in the recursive portion of the pattern
                 continue;
             }
 
+            // 3. Handle the value
+            // break iterations: if value is invalid for the given pattern
             if (!token) {
+            	// add char of the pattern
                 formatted = concatChar(formatted, pc, this.options, token);
                 if (!inRecursiveMode && recursive.length) {
+                	// save it to repeat in the end of the pattern
                     recursive.push(pc);
                 }
             } else if (token.optional) {
+            	// if token is optional, only add the value char if it matchs the token pattern
+            	//                       if not, move on to the next pattern char
                 if (token.pattern.test(vc) && optionalNumbersToUse) {
                     formatted = concatChar(formatted, vc, this.options, token);
                     valuePos = valuePos + steps.inc;
@@ -156,11 +187,14 @@
                     break;
                 }
             } else if (token.pattern.test(vc)) {
+            	// if token isn't optional the value char must match the token pattern
                 formatted = concatChar(formatted, vc, this.options, token);
                 valuePos = valuePos + steps.inc;
             } else if (!vc && token._default && this.options.usedefaults) {
+            	// if the token isn't optional and has a default value, use it if the value is finished
                 formatted = concatChar(formatted, token._default, this.options, token);
             } else {
+            	// the string value don't match the given pattern
                 valid = false;
                 break;
             }
