@@ -54,6 +54,13 @@
         return token && !token.escape ? true : hasMoreTokens(pattern, pos + inc, inc);
     }
 
+    function hasMoreRecursiveTokens(pattern, pos, inc) {
+        var pc = pattern.charAt(pos);
+        var token = tokens[pc];
+        if (pc === '') return false;
+        return token && token.recursive ? true : hasMoreRecursiveTokens(pattern, pos + inc, inc);
+    }
+
     function insertChar(text, char, position) {
         var t = text.split('');
         t.splice(position >= 0 ? position: 0, 0, char);
@@ -88,8 +95,12 @@
         };
 
         function continueCondition(options) {
-            if (!inRecursiveMode && hasMoreTokens(pattern2, i, steps.inc)) {
+            if (!inRecursiveMode && !recursive.length && hasMoreTokens(pattern2, i, steps.inc)) {
             	// continue in the normal iteration
+                return true;
+            } else if (!inRecursiveMode && recursive.length && hasMoreRecursiveTokens(pattern2, i, steps.inc)) {
+            	// continue looking for the recursive tokens
+            	// Note: all chars in the patterns after the recursive portion will be handled as static string
                 return true;
             } else if (!inRecursiveMode) {
             	// start to handle the recursive portion of the pattern
@@ -125,6 +136,10 @@
             var pc = pattern2.charAt(i);
 
             var token = tokens[pc];
+            if (recursive.length && token && !token.recursive) {
+            	// In the recursive portion of the pattern: tokens not recursive must be seen as static chars
+            	token = null;
+            }
 
             // 1. Handle escape tokens in pattern
             // go to next iteration: if the pattern char is a escape char or was escaped
