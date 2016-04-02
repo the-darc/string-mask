@@ -34,7 +34,6 @@
         "it"
     ],
     "indent": 4,
-    "maxlen": 120,
     "devel": false,
     "noempty": true
 }
