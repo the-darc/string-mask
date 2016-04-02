@@ -6,21 +6,20 @@
 
 A string formatter and validator based on masks.
 
-## Installation ##
+## INSTALLATION
 
-### With npm
+**With npm:**
 
 ```javascript
 npm install --save string-mask
 ```
 
-### With bower
+**With bower:**
 
 ```javascript
 bower install --save string-mask
 ```
-
-## Special mask's characters ##
+## SPECIAL MASK CHARACTERS
 
 Character | Description
 --- | ---
@@ -34,16 +33,54 @@ Character | Description
 `L` | Any letter (All upper case character will be mapped to lowercase)
 `$` | Escape character, used to escape any of the special formatting characters.
 
-## Usage ##
+### Special characters types
 
-### Number ###
+ - **Optional characters:** Used to parse characters that cold exist in the source string or not. See [Date and time](#date-and-time).
+
+ - **Recursive characters:** Used to parse patterns that repeat in the end or in the start of the source string. See [Two decimal number with thousands separators](#two-decimal-number-with-thousands-separators)
+
+> _Note: Any character of the pattern positioned after a recursive character will be handled as a non special character._
+
+## USAGE
+
+ **Use it creating an mask instance with the StringMask contructor:**
+
+```javascript
+/**
+ * - optionsObject parameter is optional in the constructor
+ * - apply will return the a masked string value
+ * - validate will return `true` if the string matchs the mask
+ */
+var mask = new StringMask('some mask', optionsObject); //optionsObject is optional
+var maskedValue = mask.apply('some value string');
+var isValid = mask.validate('some value string to validate');
+```
+
+**Or by the static interface:**
+
+```javascript
+/**
+ * - optionsObject parameter is optional in all methods
+ * - apply will return the a masked string value
+ * - validate will return `true` if the string matchs the mask
+ * - process will return a object: {result: <maskedValue>, valid: <isValid>}
+ */
+var maskedValue = StringMask.apply('some value string', 'some mask', optionsObject); 
+var isValid = StringMask.validate('some value string', 'some mask', optionsObject);
+var result = StringMask.process('some value string', 'some mask', optionsObject);
+```
+
+
+### Some masks examples
+
+#### Number
 
 ```javascript
 	var formatter = new StringMask('#0');
 	var result = formatter.apply('123'); // 123
 ```
 
-### Two Decimal number with thousands separators###
+#### Two decimal number with thousands separators
 
 ```javascript
 	var formatter = new StringMask('#.##0,00', {reverse: true});
@@ -51,35 +88,35 @@ Character | Description
 	result = formatter.apply('6'); // 0,06
 ```
 
-### Phone number ###
+#### Phone number
 
 ```javascript
 	var formatter = new StringMask('+00 (00) 0000-0000');
 	var result = formatter.apply('553122222222'); // +55 (31) 2222-2222
 ```
 
-### Percentage ###
+#### Percentage
 
 ```javascript
 	var formatter = new StringMask('#0,00%');
 	var result = formatter.apply('001'); // 0,01%
 ```
 
-### Brazilian CPF number ###
+#### Brazilian CPF number
 
 ```javascript
 	var formatter = new StringMask('000.000.000-00');
 	var result = formatter.apply('12965815620'); // 129.658.156-20
 ```
 
-### Date and time ###
+#### Date and time
 
 ```javascript
 	var formatter = new StringMask('90/90/9900');
 	var result = formatter.apply('1187'); // 1/1/87
 ```
 
-### Convert Case ###
+#### Convert Case
 
 ```javascript
 	var formatter = new StringMask('UUUUUUUUUUUUU');
@@ -90,3 +127,28 @@ Character | Description
 	var formatter = new StringMask('LLLLLLLLLLLLL');
 	var result = formatter.apply('To Lower Case'); // to lower case
 ```
+
+#### International Bank Number
+
+```javascript
+	var formatter = new StringMask('UUAA AAAA AAAA AAAA AAAA AAAA AAA');
+	var result = formatter.apply('FR761111900069410000AA33222');
+	// result: FR76 1111 BBBB 6941 0000 AA33 222
+```
+
+## CONTRIBUTING
+
+We'd love for you to contribute to our source code! We just ask to: 
+
+ - Write tests for the new feature or bug fix that you are solving
+ - Ensure all tests pass before send the pull-request (Use: `$ gulp pre-push`)
+ - Pull requests will not be merged if:
+   - has not unit tests
+   - reduce the code coverage
+   - not passing in the `$gulp pre-push` task
+
+## LICENSE
+
+Copyright (c) 2016 Daniel Campos
+
+Licensed under the MIT license.
