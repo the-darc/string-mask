@@ -26,8 +26,8 @@ Character | Description
 `0` | Any numbers
 `9` | Any numbers (Optional)
 `#` | Any numbers (recursive)
-`A` | Any aphanumeric character
-`a` | Any aphanumeric character (Optional) __Not implemented yet__
+`A` | Any alphanumeric character
+`a` | Any alphanumeric character (Optional) __Not implemented yet__
 `S` | Any letter
 `U` | Any letter (All lower case character will be mapped to uppercase)
 `L` | Any letter (All upper case character will be mapped to lowercase)
@@ -39,7 +39,7 @@ Character | Description
 
  - **Recursive characters:** Used to parse patterns that repeat in the end or in the start of the source string. See [Two decimal number with thousands separators](#two-decimal-number-with-thousands-separators)
 
-> _Note: Any character of the pattern positioned after a recursive character will be handled as a non special character._
+> _Note: Any character of the mask positioned after a recursive character will be handled as a non special character._
 
 ## USAGE
 
@@ -142,6 +142,7 @@ We'd love for you to contribute to our source code! We just ask to:
 
  - Write tests for the new feature or bug fix that you are solving
  - Ensure all tests pass before send the pull-request (Use: `$ gulp pre-push`)
+ - Use commit messages following the commit conventions of [angular.js Git Commit Guidelines](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit)
  - Pull requests will not be merged if:
    - has not unit tests
    - reduce the code coverage
@@ -152,3 +153,6 @@ We'd love for you to contribute to our source code! We just ask to:
 Copyright (c) 2016 Daniel Campos
 
 Licensed under the MIT license.
+  
+  
+
