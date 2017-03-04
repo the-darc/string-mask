@@ -78,10 +78,15 @@
 
     function StringMask(pattern, opt) {
         this.options = opt || {};
-        this.options = {
-            reverse: this.options.reverse || false,
-            usedefaults: this.options.usedefaults || this.options.reverse
-        };
+
+        if (typeof this.options.reverse === 'undefined') {
+            this.options.reverse = false;
+        }
+
+        if (typeof this.options.usedefaults === 'undefined') {
+            this.options.usedefaults = this.options.reverse;
+        }
+
         this.pattern = pattern;
     }
 
